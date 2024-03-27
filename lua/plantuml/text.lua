@@ -4,16 +4,17 @@ local M = {}
 
 M.Renderer = {}
 
-function M.Renderer:new()
+function M.Renderer:new(flag)
     local buf = vim.api.nvim_create_buf(false, true)
     assert(buf ~= 0, string.format('[plantuml.nvim] Failed to create buffer'))
+    assert(flag == "txt" or flag == "utxt", string.format('[plantuml.nvim] Invalid text renderer flag'))
 
     self.__index = self
-    return setmetatable({ buf = buf, win = nil }, self)
+    return setmetatable({ buf = buf, flag = flag, win = nil }, self)
 end
 
 function M.Renderer:render(file)
-    utils.Command:new(string.format('plantuml -pipe -tutxt < %s', file)):start(function(output)
+    utils.Command:new(string.format('plantuml -pipe -t' .. self.flag .. ' < %s', file)):start(function(output)
         self:_write_output(output)
         self:_create_split()
     end)

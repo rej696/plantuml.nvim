@@ -12,7 +12,9 @@ end
 local function create_renderer(type)
     local renderer
     if type == 'text' then
-        renderer = text.Renderer:new()
+        renderer = text.Renderer:new("txt")
+    elseif type == 'unicode' then
+        renderer = text.Renderer:new("utxt")
     elseif type == 'imv' then
         renderer = imv.Renderer:new()
     else
